@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using questions.Data;
+
 namespace questions
 {
 	public class Program
@@ -9,7 +12,15 @@ namespace questions
 			// Add services to the container.
 			builder.Services.AddRazorPages();
 
-			var app = builder.Build();
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+			 options.UseSqlServer(
+			 builder.Configuration.GetConnectionString("DefaultConnection")
+			 )
+			);
+
+
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())
