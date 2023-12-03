@@ -25,5 +25,10 @@ namespace questions.Data.Models
         public long? REPO_ID { get; set; }
 
 
+        public EXAM_REPOSITORY? ExamRepository { get; set; } = null!;
+
+
+        public ICollection<EXAM_QUETION>? ExamQuestions { get; set; } = null!;
+
     }
 }

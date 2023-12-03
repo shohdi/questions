@@ -28,6 +28,22 @@ namespace questions.Data.Models
         [Column(TypeName = "decimal(10)")]
         public long? QUESTION_ID { get; set; }
 
+        
+        [ForeignKey(nameof(SELECTION))]
+        [Column(TypeName = "decimal(10)")]
+        public long? ANSWER_ID { get; set; }
+
+
+        public QUESTION? Question { get; set; } = null!;
+
+        public EXAM? Exam { get; set; } = null!;
+
+
+        public SELECTION? Selection { get; set; } = null!;
+
+
+
+
 
     }
 }
