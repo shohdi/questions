@@ -17,6 +17,7 @@ namespace questions.Data.Models
         public long? ID { get; set; }
 
         [Required]
+        [Column(TypeName = "nvarchar(1000)")]
         public string SELECTION_TEXT { get; set; }
 
         [Required]

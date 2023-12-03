@@ -16,8 +16,10 @@ namespace questions.Data.Models
         public long? ID { get; set; }
 
         [Required]
+        [Column(TypeName = "nvarchar(2000)")]
         public string QUESTION_TEXT { get; set; }
 
+        [Column(TypeName = "nvarchar(1000)")]
         public string IMAGE_PATH { get; set; }
 
 
