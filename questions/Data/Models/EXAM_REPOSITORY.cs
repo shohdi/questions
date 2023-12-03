@@ -17,8 +17,8 @@ namespace questions.Data.Models
 		public string NAME { get; set; }
 
 
+        public ICollection<QUESTION>? Questions { get; set; } = null!;
 
 
-
-	}
+    }
 }

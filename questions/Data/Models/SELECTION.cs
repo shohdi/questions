@@ -29,5 +29,8 @@ namespace questions.Data.Models
         public long? QUESTION_ID { get; set; }
 
 
+        public QUESTION? Question { get; set; } = null!;
+
+
     }
 }
