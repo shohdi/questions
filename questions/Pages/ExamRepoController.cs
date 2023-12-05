@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using questions.Data;
 using questions.Models;
+using System.Runtime.CompilerServices;
 
 namespace questions.Pages
 {
@@ -15,7 +16,8 @@ namespace questions.Pages
 			this.logger = _logger;
 			this.context = _context;
 		}
-        
+
+		[HttpGet]
         public async Task<IActionResult> Index()
 		{
 			var myModel = new ExamRepoVM();
@@ -24,5 +26,12 @@ namespace questions.Pages
 
 			return View(myModel);
 		}
-	}
+
+        [HttpGet]
+        public async Task<IActionResult> Repository(long? RepoId = null)
+		{
+			return View();
+		}
+
+    }
 }
