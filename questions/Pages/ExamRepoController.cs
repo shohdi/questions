@@ -30,8 +30,20 @@ namespace questions.Pages
         [HttpGet]
         public async Task<IActionResult> Repository(long? RepoId = null)
 		{
+
 			return View();
 		}
+
+        [HttpPost]
+        public async Task<IActionResult> Repository([FromBody] ExamRepoPostVM myModel,[FromQuery] long? RepoId = null)
+        {
+			if(ModelState.IsValid)
+			{
+				//var oldExam = this.Repository
+			}
+
+            return View();
+        }
 
     }
 }
