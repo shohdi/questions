@@ -41,8 +41,12 @@ namespace questions.Pages
 			{
 				//var oldExam = this.Repository
 			}
-
-            return View();
+			else
+			{
+                return View(myModel);
+            }
+			return null;
+            
         }
 
     }
