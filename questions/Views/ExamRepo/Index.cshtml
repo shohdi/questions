@@ -1,0 +1,105 @@
+﻿@using questions.Models
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ExamRepoVM
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Exam Repositories";
+
+
+
+}
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        @ViewData["Title"]
+        <hr />
+    </div>
+    @await Html.PartialAsync("_AlertMessage")
+    <div class="col-md-12">
+        <a href="@Url.Action("Repository")" class="btn btn-success">Add <i class="bi bi-plus"></i></a>
+    </div>
+
+    @if (Model.AllExams.Count == 0)
+    {
+        <div class="col-md-12">
+           <div class="alert alert-danger">No Exams</div>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            Exam Repository
+                        </th>
+                        <th>
+                            Edit
+                        </th>
+                        <th>
+                            Delete
+                        </th>
+                        <th>
+                            Questions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var item in Model.AllExams)
+                    {
+                        <tr>
+                            <td>
+                                @item.NAME
+                            </td>
+                            <td>
+                                <a class="btn btn-warning" href='@Url.Action("Repository",new {RepoId=item.ID})'><i class="bi bi-pencil-square"></i></a>
+                            </td>
+                            <td>
+                                @using (Html.BeginForm("Delete", "ExamRepo",  FormMethod.Post))
+                                {
+                                    <input type="hidden" value="@item.ID" name="RepoId" /> 
+                                    <button type="submit" class="btn btn-danger deleteButton"><i class="bi bi-eraser"></i></button>
+                                }
+                                
+                            </td>
+                            <td>
+                                <a class="btn btn-success" href='@Url.Action("Index","Questions",new {RepoId=item.ID})'><i class="bi bi-question"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+
+   
+
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $(document).on('click', '.deleteButton', deleteClick);
+        });
+        
+        function deleteClick(e)
+        {
+            e.preventDefault();
+            let form = $(e.target).parents('form');
+            let answer = confirm('Are you sure ? you can\'t undo deleting it');
+            if (answer)
+            {
+                form.submit();
+                return true;
+            }
+            return false;
+        }
+    </script>
+}
