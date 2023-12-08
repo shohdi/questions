@@ -7,6 +7,11 @@ namespace questions.Models
         [Required]
         [MaxLength(450)]
 
+        
         public string Name { get; set; }
+
+
+        public long? RepoId { get; set; }
+
     }
 }
