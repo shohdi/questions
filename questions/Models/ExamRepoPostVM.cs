@@ -14,4 +14,10 @@ namespace questions.Models
         public long? RepoId { get; set; }
 
     }
+
+    public class DeleteRepoVM
+    {
+        [Required]
+        public long? RepoId { get; set; }
+    }
 }

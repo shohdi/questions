@@ -61,9 +61,10 @@
                                 <a class="btn btn-warning" href='@Url.Action("Repository",new {RepoId=item.ID})'><i class="bi bi-pencil-square"></i></a>
                             </td>
                             <td>
-                                @using (Html.BeginForm("Delete", "ExamRepo", new { RepoId = item.ID }, FormMethod.Post))
+                                @using (Html.BeginForm("Delete", "ExamRepo",  FormMethod.Post))
                                 {
-                                    <button type="submit" class="btn btn-danger" onclick="javascript:return confirm('Are you sure ? you can't undo deleting it');" ><i class="bi bi-eraser"></i></button>
+                                    <input type="hidden" value="@item.ID" name="RepoId" /> 
+                                    <button type="submit" class="btn btn-danger deleteButton"><i class="bi bi-eraser"></i></button>
                                 }
                                 
                             </td>
@@ -81,3 +82,24 @@
    
 
 </div>
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $(document).on('click', '.deleteButton', deleteClick);
+        });
+        
+        function deleteClick(e)
+        {
+            e.preventDefault();
+            let form = $(e.target).parents('form');
+            let answer = confirm('Are you sure ? you can\'t undo deleting it');
+            if (answer)
+            {
+                form.submit();
+                return true;
+            }
+            return false;
+        }
+    </script>
+}

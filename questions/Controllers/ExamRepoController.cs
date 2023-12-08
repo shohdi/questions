@@ -48,6 +48,53 @@ namespace questions.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> Delete(DeleteRepoVM myModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var RepoId = myModel.RepoId;
+                ViewBag.RepoId = RepoId;
+
+                if (RepoId == null)
+                {
+
+                    TempData["message"] = "Exam not found to delete!";
+                    TempData["class"] = "alert alert-danger";
+                    return RedirectToAction("Index");
+
+
+                }
+                else
+                {
+                    //delete model
+                    var oldExam = await context.ExamRepositories.Where(w => w.ID == RepoId).FirstOrDefaultAsync();
+                    if (oldExam == null)
+                    {
+                        TempData["message"] = "Exam not found to delete!";
+                        TempData["class"] = "alert alert-danger";
+                        return RedirectToAction("Index");
+
+                    }
+
+                    context.ExamRepositories.Remove(oldExam);    
+                    await context.SaveChangesAsync();
+                    TempData["message"] = "Deleted Successfully!";
+                    TempData["class"] = "alert alert-success";
+                    return RedirectToAction("Index");
+
+                   
+
+                }
+
+            }
+            else
+            {
+                return View(myModel);
+            }
+        }
+
+
+        [HttpPost]
         public async Task<IActionResult> Repository( ExamRepoPostVM myModel)
         {
            
