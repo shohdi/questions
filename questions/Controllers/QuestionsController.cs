@@ -51,6 +51,8 @@ namespace questions.Controllers
                 if (oldQuestion != null)
                 {
                     myModel.Question = oldQuestion.QUESTION_TEXT;
+                    myModel.ImagePath = oldQuestion.IMAGE_PATH;
+                    myModel.Selections = await context.Selections.Where(s=> s.QUESTION_ID == id).ToListAsync();
 
                 }
             }
@@ -156,7 +158,7 @@ namespace questions.Controllers
                         await context.SaveChangesAsync();
                         TempData["message"] = "Added Successfully!";
                         TempData["class"] = "alert alert-success";
-                        return RedirectToAction("Index",new {parentId=dbModel.REPO_ID });
+                        return RedirectToAction("Question", new { parentId = dbModel.REPO_ID, id = dbModel.ID });
 
                     }
                     else
@@ -179,7 +181,7 @@ namespace questions.Controllers
                         await context.SaveChangesAsync();
                         TempData["message"] = "Saved Successfully!";
                         TempData["class"] = "alert alert-success";
-                        return RedirectToAction("Index", new { parentId = oldQuestion.REPO_ID });
+                        return RedirectToAction("Question", new { parentId = oldQuestion.REPO_ID , id=oldQuestion.ID });
 
                     }
                     else
