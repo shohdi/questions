@@ -28,6 +28,7 @@ namespace questions.Controllers
                 return RedirectToAction("Index", "ExamRepo");
             }
             var myModel = new QuestionsVM();
+            myModel.parentId = parentId;
             //read Questions
             myModel.Questions = await context.Questions.Where(w=>w.REPO_ID == parentId).ToListAsync();
 

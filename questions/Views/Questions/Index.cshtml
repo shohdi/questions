@@ -1,0 +1,112 @@
+﻿@using questions.Models
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model QuestionsVM
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Exam Questions";
+
+
+
+}
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        @ViewData["Title"]
+        <hr />
+    </div>
+    @await Html.PartialAsync("_AlertMessage")
+    <div class="col-md-12">
+        <a href="@Url.Action("Question",new {parentId = Model.parentId})" class="btn btn-success">Add <i class="bi bi-plus"></i></a>
+    </div>
+
+    @if (Model.Questions.Count == 0)
+    {
+        <div class="col-md-12">
+            <div class="alert alert-danger">No Questions</div>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            Question
+                        </th>
+                        <th>
+                            Image
+                        </th>
+                        <th>
+                            Edit
+                        </th>
+                        <th>
+                            Delete
+                        </th>
+                        <th>
+                            Selections
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Questions)
+                    {
+                        <tr>
+                            <td>
+                                @item.QUESTION_TEXT
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(item.IMAGE_PATH))
+                                {
+                                    <img width="100" src="@item.IMAGE_PATH" />
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-warning" href='@Url.Action("Question",new {parentId=Model.parentId ,Id=item.ID})'><i class="bi bi-pencil-square"></i></a>
+                            </td>
+                            <td>
+                                @using (Html.BeginForm("Delete", "Questions", FormMethod.Post))
+                                {
+                                    <input type="hidden" value="@item.ID" name="QuestionId" />
+                                    <button type="submit" class="btn btn-danger deleteButton"><i class="bi bi-eraser"></i></button>
+                                }
+
+                            </td>
+                            <td>
+                                <a class="btn btn-success" href='@Url.Action("Index","Selections",new {parentId=item.ID})'><i class="bi bi-question"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+
+
+
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $(document).on('click', '.deleteButton', deleteClick);
+        });
+
+        function deleteClick(e) {
+            e.preventDefault();
+            let form = $(e.target).parents('form');
+            let answer = confirm('Are you sure ? you can\'t undo deleting it');
+            if (answer) {
+                form.submit();
+                return true;
+            }
+            return false;
+        }
+    </script>
+}
