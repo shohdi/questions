@@ -30,7 +30,7 @@ namespace questions.Controllers
             var myModel = new QuestionsVM();
             myModel.parentId = parentId;
             //read Questions
-            myModel.Questions = await context.Questions.Where(w=>w.REPO_ID == parentId).ToListAsync();
+            myModel.Questions = await context.Questions.Where(w=>w.REPO_ID == parentId).Include(a=>a.Selections).ToListAsync();
 
             return View(myModel);
         }
