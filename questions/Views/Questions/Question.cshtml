@@ -36,7 +36,10 @@
             @Html.ValidationMessageFor(i => i.Question, "", new { @class = "text-danger" })
 
         </div>
-       
+
+        @if (Model.QuestionId != null)
+        {
+
             <div class="col-md-12">
 
                 <a href="@Url.Action("Index","Selection",new {parentId=Model.QuestionId})" class="btn btn-success">Add Selection <i class="bi bi-plus"></i></a>
@@ -55,11 +58,11 @@
                             <th>
                                 Delete
                             </th>
-                           
+
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach (var selection in Model.Selections)
+                        @foreach (var selection in Model.Selections)
                         {
                             <tr>
                                 <td>
@@ -81,14 +84,14 @@
                                     }
 
                                 </td>
-                              
+
                             </tr>
                         }
                     </tbody>
                 </table>
 
             </div>
-        
+        }
         
         
         <div class="col-md-12 form-group">
