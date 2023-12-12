@@ -72,7 +72,7 @@
                             <td>
                                 @using (Html.BeginForm("Delete", "Questions", FormMethod.Post))
                                 {
-                                    <input type="hidden" value="@item.ID" name="QuestionId" />
+                                    <input type="hidden" value="@item.ID" name="id" />
                                     <button type="submit" class="btn btn-danger deleteButton"><i class="bi bi-eraser"></i></button>
                                 }
 

@@ -27,9 +27,10 @@ namespace questions.Models
 
     }
 
-    public class DeleteQuestionsVM
+    public class DeleteVM
     {
         [Required]
-        public long? QuestionId { get; set; }
+        public long? id { get; set; }
+        
     }
 }

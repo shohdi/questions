@@ -30,7 +30,24 @@
     {
         @Html.HiddenFor(m => m.RepoId)
         @Html.HiddenFor(m => m.QuestionId)
+
+        @if(!string.IsNullOrWhiteSpace(Model.ImagePath))
+        {
+            <div class="col-md-12 form-group">
+                <img width="100%" src="@Model.ImagePath" />
+            </div>
+        }
+
         <div class="col-md-12 form-group">
+            @Html.Label("ImagePath","Choose Image File")
+            <input type="file" class="form-control" />
+            @Html.ValidationMessageFor(i => i.ImagePath, "", new { @class = "text-danger" })
+        
+        </div>
+        
+
+        <div class="col-md-12 form-group">
+            
             @Html.LabelFor(f => f.Question, new { @class = "control-label" })
             @Html.TextAreaFor(f => f.Question, 5, 5, new { @class = "form-control" })
             @Html.ValidationMessageFor(i => i.Question, "", new { @class = "text-danger" })

@@ -82,11 +82,11 @@ namespace questions.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(DeleteQuestionsVM myModel)
+        public async Task<IActionResult> Delete(DeleteVM myModel)
         {
             if (ModelState.IsValid)
             {
-                var id = myModel.QuestionId;
+                var id = myModel.id;
                 ViewBag.id = id;
 
                 if (id == null)
@@ -152,8 +152,17 @@ namespace questions.Controllers
                         ModelState.AddModelError("", "Question already found before!");
 
                     }
+                    if (Request.Form.Files != null && Request.Form.Files.Count > 0)
+                    {
+                        var fileName = Request.Form.Files[0].FileName;
+                        var length = Request.Form.Files[0].Length;
+                        //byte[] btFile = 
+                        //var fileBytes= Request.Form.Files[0].OpenReadStream().ReadAsync()
+                        //if (Request.Form.Files[0].FileName.ToLower().EndsWith(""))
+                    }
                     if (ModelState.IsValid)
                     {
+                        
                         QUESTION dbModel = new QUESTION();
                         dbModel.REPO_ID = myModel.RepoId;
                         dbModel.QUESTION_TEXT = myModel.Question;
