@@ -12,11 +12,15 @@ namespace questions.Controllers
     {
         private readonly ILogger<QuestionsController> logger;
         private readonly ApplicationDbContext context;
+        private readonly IWebHostEnvironment environment;
         public QuestionsController(ILogger<QuestionsController> _logger
-            , ApplicationDbContext _context)
+            , ApplicationDbContext _context
+            , IWebHostEnvironment _environment)
         {
             logger = _logger;
             context = _context;
+            this.environment = _environment;
+            
         }
 
         [HttpGet]
@@ -154,11 +158,48 @@ namespace questions.Controllers
                     }
                     if (Request.Form.Files != null && Request.Form.Files.Count > 0)
                     {
-                        var fileName = Request.Form.Files[0].FileName;
-                        var length = Request.Form.Files[0].Length;
-                        //byte[] btFile = 
-                        //var fileBytes= Request.Form.Files[0].OpenReadStream().ReadAsync()
-                        //if (Request.Form.Files[0].FileName.ToLower().EndsWith(""))
+                        var fileData = Request.Form.Files[0];
+                        var fileName = fileData.FileName;
+                        var length = fileData.Length;
+                        bool isValidFile = true;
+                        if (!fileName.ToLower().EndsWith(".jpg"))
+                        {
+                            
+                            ModelState.AddModelError("ImagePath", "only .jpg is allowed!");
+                            isValidFile = false;
+                        }
+                        if(isValidFile)
+                        {
+                            if(!string.IsNullOrWhiteSpace(myModel.ImagePath))
+                            {
+
+                            }
+                            byte[] btFile = new byte[1024];
+                            List<byte> lstFile = new List<byte>();
+                            int readed = 1;
+                            var stream = fileData.OpenReadStream();
+                            while (readed > 0)
+                            {
+                                btFile = new byte[1024];
+                                readed = await stream.ReadAsync(btFile, 0, 1024);
+                                if (readed == 1024)
+                                {
+                                    lstFile.AddRange(btFile);
+                                }
+                                else if (readed > 0)
+                                {
+                                    lstFile.AddRange(btFile.Take(readed));
+                                }
+
+                            }
+                            btFile = lstFile.ToArray();
+                            //var path = Path.Combine(this.environment.WebRootPath, "~\\AppData\\Data\\" +  )
+                            //if (!Directory.Exists())
+                        }
+                           
+
+                        
+                        
                     }
                     if (ModelState.IsValid)
                     {
