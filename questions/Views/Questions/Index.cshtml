@@ -2,10 +2,10 @@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model ExamRepoVM
+@model QuestionsVM
 @{
     Layout = "_Layout";
-    ViewData["Title"] = "Exam Repositories";
+    ViewData["Title"] = "Exam Questions";
 
 
 
@@ -21,13 +21,13 @@
     </div>
     @await Html.PartialAsync("_AlertMessage")
     <div class="col-md-12">
-        <a href="@Url.Action("Repository")" class="btn btn-success">Add <i class="bi bi-plus"></i></a>
+        <a href="@Url.Action("Question",new {parentId = Model.parentId})" class="btn btn-success">Add <i class="bi bi-plus"></i></a>
     </div>
 
-    @if (Model.AllExams.Count == 0)
+    @if (Model.Questions.Count == 0)
     {
         <div class="col-md-12">
-           <div class="alert alert-danger">No Exams</div>
+            <div class="alert alert-danger">No Questions</div>
         </div>
     }
     else
@@ -37,7 +37,10 @@
                 <thead>
                     <tr>
                         <th>
-                            Exam Repository
+                            Question
+                        </th>
+                        <th>
+                            Image
                         </th>
                         <th>
                             Edit
@@ -46,30 +49,48 @@
                             Delete
                         </th>
                         <th>
-                            Questions
+                            Selections
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(var item in Model.AllExams)
+                    @foreach (var item in Model.Questions)
                     {
                         <tr>
                             <td>
-                                @item.NAME
+                                @item.QUESTION_TEXT
                             </td>
                             <td>
-                                <a class="btn btn-warning" href='@Url.Action("Repository",new {RepoId=item.ID})'><i class="bi bi-pencil-square"></i></a>
-                            </td>
-                            <td>
-                                @using (Html.BeginForm("Delete", "ExamRepo",  FormMethod.Post))
+                                @if (!string.IsNullOrWhiteSpace(item.IMAGE_PATH))
                                 {
-                                    <input type="hidden" value="@item.ID" name="RepoId" /> 
+                                    <img width="100" src="@item.IMAGE_PATH" />
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-warning" href='@Url.Action("Question",new {parentId=Model.parentId ,Id=item.ID})'><i class="bi bi-pencil-square"></i></a>
+                            </td>
+                            <td>
+                                @using (Html.BeginForm("Delete", "Questions", FormMethod.Post))
+                                {
+                                    <input type="hidden" value="@item.ID" name="id" />
                                     <button type="submit" class="btn btn-danger deleteButton"><i class="bi bi-eraser"></i></button>
                                 }
-                                
+
                             </td>
                             <td>
-                                <a class="btn btn-success" href='@Url.Action("Index","Questions",new {parentId=item.ID})'><i class="bi bi-question"></i></a>
+                                <ul>
+                                    @foreach(var selection in item.Selections)
+                                    {
+                                        <li>
+                                            @("" + selection.ID + " " + selection.SELECTION_TEXT)
+                                            @if(selection.IS_ANSWER.GetValueOrDefault())
+                                            {
+                                                <span>&nbsp;</span>
+                                                <i class="bi bi-check"></i>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
                             </td>
                         </tr>
                     }
@@ -79,7 +100,7 @@
     }
 
 
-   
+
 
 </div>
 @section scripts
@@ -88,14 +109,12 @@
         $(function () {
             $(document).on('click', '.deleteButton', deleteClick);
         });
-        
-        function deleteClick(e)
-        {
+
+        function deleteClick(e) {
             e.preventDefault();
             let form = $(e.target).parents('form');
             let answer = confirm('Are you sure ? you can\'t undo deleting it');
-            if (answer)
-            {
+            if (answer) {
                 form.submit();
                 return true;
             }
