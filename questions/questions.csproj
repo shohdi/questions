@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\AppData\" />
     <Folder Include="wwwroot\lib\font\" />
   </ItemGroup>
 
