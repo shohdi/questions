@@ -15,7 +15,7 @@ namespace questions.Models
         
         public string Question { get; set; }
 
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
 
 
         public long? QuestionId { get; set; }

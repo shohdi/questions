@@ -20,7 +20,7 @@ namespace questions.Data.Models
         public string QUESTION_TEXT { get; set; }
 
         [Column(TypeName = "nvarchar(1000)")]
-        public string IMAGE_PATH { get; set; }
+        public string? IMAGE_PATH { get; set; }
 
 
         [Required]

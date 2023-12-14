@@ -114,7 +114,7 @@ namespace questions.Controllers
 
                     }
                     var parentId = oldQuestion.REPO_ID;
-
+                    deleteImagePath(oldQuestion);
                     context.Questions.Remove(oldQuestion);    
                     await context.SaveChangesAsync();
                     TempData["message"] = "Deleted Successfully!";
@@ -150,63 +150,23 @@ namespace questions.Controllers
                 if (id == null)
                 {
                     //new model
-                    var oldQuestion = await context.Questions.Where(w => w.REPO_ID == myModel.RepoId &&  w.QUESTION_TEXT == myModel.Question).FirstOrDefaultAsync();
+                    var oldQuestion = await context.Questions.Where(w => w.REPO_ID == myModel.RepoId && w.QUESTION_TEXT == myModel.Question).FirstOrDefaultAsync();
                     if (oldQuestion != null)
                     {
                         ModelState.AddModelError("", "Question already found before!");
 
                     }
-                    if (Request.Form.Files != null && Request.Form.Files.Count > 0)
-                    {
-                        var fileData = Request.Form.Files[0];
-                        var fileName = fileData.FileName;
-                        var length = fileData.Length;
-                        bool isValidFile = true;
-                        if (!fileName.ToLower().EndsWith(".jpg"))
-                        {
-                            
-                            ModelState.AddModelError("ImagePath", "only .jpg is allowed!");
-                            isValidFile = false;
-                        }
-                        if(isValidFile)
-                        {
-                            if(!string.IsNullOrWhiteSpace(myModel.ImagePath))
-                            {
-
-                            }
-                            byte[] btFile = new byte[1024];
-                            List<byte> lstFile = new List<byte>();
-                            int readed = 1;
-                            var stream = fileData.OpenReadStream();
-                            while (readed > 0)
-                            {
-                                btFile = new byte[1024];
-                                readed = await stream.ReadAsync(btFile, 0, 1024);
-                                if (readed == 1024)
-                                {
-                                    lstFile.AddRange(btFile);
-                                }
-                                else if (readed > 0)
-                                {
-                                    lstFile.AddRange(btFile.Take(readed));
-                                }
-
-                            }
-                            btFile = lstFile.ToArray();
-                            //var path = Path.Combine(this.environment.WebRootPath, "~\\AppData\\Data\\" +  )
-                            //if (!Directory.Exists())
-                        }
-                           
-
-                        
-                        
-                    }
+                    var btFile =  await getFile(myModel);
                     if (ModelState.IsValid)
                     {
-                        
+
                         QUESTION dbModel = new QUESTION();
                         dbModel.REPO_ID = myModel.RepoId;
                         dbModel.QUESTION_TEXT = myModel.Question;
+                        if (btFile != null)
+                        {
+                            await saveFile(btFile, dbModel);
+                        }
                         await context.AddAsync(dbModel);
                         await context.SaveChangesAsync();
                         TempData["message"] = "Added Successfully!";
@@ -228,9 +188,14 @@ namespace questions.Controllers
                         ModelState.AddModelError("", "Question not found!");
 
                     }
+                    var btFile = await getFile(myModel);
                     if (ModelState.IsValid)
                     {
                         oldQuestion.QUESTION_TEXT = myModel.Question;
+                        if(btFile != null)
+                        {
+                            await saveFile(btFile, oldQuestion);
+                        }
                         await context.SaveChangesAsync();
                         TempData["message"] = "Saved Successfully!";
                         TempData["class"] = "alert alert-success";
@@ -253,5 +218,93 @@ namespace questions.Controllers
 
         }
 
+        private async Task saveFile(byte[] btFile, QUESTION oldQuestion)
+        {
+            string myVirPath = Path.Combine("AppData", "Images", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString());
+            string fileName = System.Guid.NewGuid().ToString() + ".jpg";
+            string directory = Path.Combine(this.environment.WebRootPath, myVirPath);
+            string fullFileName = Path.Combine(directory, fileName);
+            string fullVirtualPath = Path.Combine(myVirPath, fileName);
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+            await System.IO.File.WriteAllBytesAsync(fullFileName, btFile);
+
+            deleteImagePath(oldQuestion);
+            oldQuestion.IMAGE_PATH = fullVirtualPath;
+
+
+
+
+        }
+
+        private void deleteImagePath(QUESTION oldQuestion)
+        {
+            if (!string.IsNullOrWhiteSpace(oldQuestion.IMAGE_PATH))
+            {
+                var oldFullFileName = Path.Combine(this.environment.WebRootPath, oldQuestion.IMAGE_PATH);
+                try
+                {
+                    System.IO.File.Delete(oldFullFileName);
+                }
+                catch (Exception ex)
+                {
+                    this.logger.Log(LogLevel.Error, ex.ToString());
+
+                }
+
+            }
+        }
+
+        private async Task<byte[]> getFile(QuestionsPostVM myModel)
+        {
+            if (Request.Form.Files != null && Request.Form.Files.Count > 0)
+            {
+                var fileData = Request.Form.Files[0];
+                var fileName = fileData.FileName;
+                var length = fileData.Length;
+                bool isValidFile = true;
+                if (!fileName.ToLower().EndsWith(".jpg"))
+                {
+
+                    ModelState.AddModelError("ImagePath", "only .jpg is allowed!");
+                    isValidFile = false;
+                }
+                if (isValidFile)
+                {
+                    if (!string.IsNullOrWhiteSpace(myModel.ImagePath))
+                    {
+
+                    }
+                    byte[] btFile = new byte[1024];
+                    List<byte> lstFile = new List<byte>();
+                    int readed = 1;
+                    var stream = fileData.OpenReadStream();
+                    while (readed > 0)
+                    {
+                        btFile = new byte[1024];
+                        readed = await stream.ReadAsync(btFile, 0, 1024);
+                        if (readed == 1024)
+                        {
+                            lstFile.AddRange(btFile);
+                        }
+                        else if (readed > 0)
+                        {
+                            lstFile.AddRange(btFile.Take(readed));
+                        }
+
+                    }
+                    btFile = lstFile.ToArray();
+                    return btFile;
+                }
+
+
+
+
+            }
+            return null;
+        }
     }
 }
