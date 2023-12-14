@@ -274,10 +274,7 @@ namespace questions.Controllers
                 }
                 if (isValidFile)
                 {
-                    if (!string.IsNullOrWhiteSpace(myModel.ImagePath))
-                    {
-
-                    }
+                   
                     byte[] btFile = new byte[1024];
                     List<byte> lstFile = new List<byte>();
                     int readed = 1;

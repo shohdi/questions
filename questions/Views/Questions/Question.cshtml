@@ -26,7 +26,7 @@
 </div>
 <div class="row">
 
-    @using (Html.BeginForm("Question", "Questions", FormMethod.Post))
+    @using (Html.BeginForm("Question", "Questions", FormMethod.Post, new { enctype= "multipart/form-data" }))
     {
         @Html.HiddenFor(m => m.RepoId)
         @Html.HiddenFor(m => m.QuestionId)
@@ -34,13 +34,13 @@
         @if(!string.IsNullOrWhiteSpace(Model.ImagePath))
         {
             <div class="col-md-12 form-group">
-                <img width="100%" src="@Model.ImagePath" />
+                <img width="100%" src="@("/"+Model.ImagePath)" />
             </div>
         }
 
         <div class="col-md-12 form-group">
             @Html.Label("ImagePath","Choose Image File")
-            <input type="file" class="form-control" />
+            <input type="file" class="form-control" name="myFile" />
             @Html.ValidationMessageFor(i => i.ImagePath, "", new { @class = "text-danger" })
         
         </div>
