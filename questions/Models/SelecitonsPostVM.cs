@@ -5,6 +5,11 @@ namespace questions.Models
 {
     public class SelectionsPostVM
     {
+        public SelectionsPostVM ()
+        {
+            this.IsAnswer = false;
+
+        }
 
 
         [Required]
@@ -13,7 +18,8 @@ namespace questions.Models
 
         public string Selection { get; set; }
 
-        public bool? IsAnswer { get; set; }
+        [Required]
+        public bool IsAnswer { get; set; }
 
         public long? SelectionID { get; set; }
 

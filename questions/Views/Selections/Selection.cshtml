@@ -1,0 +1,65 @@
+﻿@using questions.Models
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model SelectionsPostVM
+@{
+    Layout = "_Layout";
+    if (ViewBag.id == null)
+    {
+        ViewData["Title"] = "Question Selections - Add";
+    }
+    else
+    {
+        ViewData["Title"] = "Question Selections - Edit";
+    }
+
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @ViewData["Title"]
+        <hr />
+    </div>
+    @await Html.PartialAsync("_AlertMessage")
+</div>
+<div class="row">
+
+    @using (Html.BeginForm("Selection", "Selections", FormMethod.Post))
+    {
+        @Html.HiddenFor(m => m.SelectionID)
+        @Html.HiddenFor(m => m.QuestionID)
+        @Html.HiddenFor(m => m.RepoID)
+        <div class="col-md-12 form-group">
+            @Html.LabelFor(f => f.Selection, new { @class = "control-label" })
+            @Html.TextAreaFor(f => f.Selection, 5, 5, new { @class = "form-control" })
+            @Html.ValidationMessageFor(i => i.Selection, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="col-md-12 form-group">
+            <div class="form-check form-switch">
+
+
+                @Html.CheckBoxFor(i => i.IsAnswer, new { @class = "form-check-input" ,value="true"})
+                
+                <input type="hidden" name="IsAnswer" value="false" />
+                <label class="form-check-label" for="IsAnswer">Is Answer</label>
+            </div>
+            @Html.ValidationMessageFor(i => i.IsAnswer, "", new { @class = "text-danger" })
+        </div>
+       
+        <div class="col-md-12 form-group">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-12 form-group">
+            <a href="@Url.Action("Question","Questions",new {id=Model.QuestionID,parentId=Model.RepoID})" class="btn btn-warning">Back</a>
+            <span>&nbsp;&nbsp;</span>
+            <button type="submit" class="btn btn-success">Save</button>
+
+
+        </div>
+    }
+
+</div>
+
+

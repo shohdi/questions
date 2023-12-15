@@ -54,61 +54,6 @@
 
         </div>
 
-        @if (Model.QuestionId != null)
-        {
-
-            <div class="col-md-12">
-
-                <a href="@Url.Action("Index","Selection",new {parentId=Model.QuestionId})" class="btn btn-success">Add Selection <i class="bi bi-plus"></i></a>
-
-            </div>
-            <div class="col-md-12">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>
-                                Selection
-                            </th>
-                            <th>
-                                Edit
-                            </th>
-                            <th>
-                                Delete
-                            </th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var selection in Model.Selections)
-                        {
-                            <tr>
-                                <td>
-                                    @("" + selection.ID + " " + selection.SELECTION_TEXT)
-                                    @if (selection.IS_ANSWER.GetValueOrDefault())
-                                    {
-                                        <span>&nbsp;</span>
-                                        <i class="bi bi-check"></i>
-                                    }
-                                </td>
-                                <td>
-                                    <a class="btn btn-warning" href='@Url.Action("Selection","Selections",new {id=selection.ID,parentId=Model.QuestionId})'><i class="bi bi-pencil-square"></i></a>
-                                </td>
-                                <td>
-                                    @using (Html.BeginForm("Delete", "Selections", FormMethod.Post))
-                                    {
-                                        <input type="hidden" value="@selection.ID" name="id" />
-                                        <button type="submit" class="btn btn-danger deleteButton"><i class="bi bi-eraser"></i></button>
-                                    }
-
-                                </td>
-
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-
-            </div>
-        }
         
         
         <div class="col-md-12 form-group">
@@ -123,6 +68,64 @@
 
         </div>
     }
+
+    <br/>
+    @if (Model.QuestionId != null)
+    {
+
+        <div class="col-md-12">
+
+            <a href="@Url.Action("Selection","Selections",new {parentId=Model.QuestionId})" class="btn btn-success">Add Selection <i class="bi bi-plus"></i></a>
+
+        </div>
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            Selection
+                        </th>
+                        <th>
+                            Edit
+                        </th>
+                        <th>
+                            Delete
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var selection in Model.Selections)
+                    {
+                        <tr>
+                            <td>
+                                @(selection.SELECTION_TEXT)
+                                @if (selection.IS_ANSWER.GetValueOrDefault())
+                                {
+                                    <span>&nbsp;</span>
+                                    <i class="bi bi-check"></i>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-warning" href='@Url.Action("Selection","Selections",new {id=selection.ID,parentId=Model.QuestionId})'><i class="bi bi-pencil-square"></i></a>
+                            </td>
+                            <td>
+                                @using (Html.BeginForm("Delete", "Selections", FormMethod.Post))
+                                {
+                                    <input type="hidden" value="@selection.ID" name="id" />
+                                    <button type="submit" class="btn btn-danger deleteButton"><i class="bi bi-eraser"></i></button>
+                                }
+
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    }
+
 
 </div>
 

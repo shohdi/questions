@@ -53,13 +53,13 @@ namespace questions.Controllers
             if (id != null)
             {
                 
-                var oldQuestion = await context.Questions.Where(w => w.ID == id).Include(w=>w.Selections).FirstOrDefaultAsync();
+                var oldQuestion = await context.Questions.Where(w => w.ID == id).FirstOrDefaultAsync();
                 if (oldQuestion != null)
                 {
                     myModel.QuestionId = oldQuestion.ID;
                     myModel.Question = oldQuestion.QUESTION_TEXT;
                     myModel.ImagePath = oldQuestion.IMAGE_PATH;
-                    myModel.Selections = oldQuestion.Selections.ToList();
+                    myModel.Selections = await context.Selections.Where(s=>s.QUESTION_ID == oldQuestion.ID).ToListAsync() ;
 
                 }
             }

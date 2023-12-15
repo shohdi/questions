@@ -112,12 +112,12 @@ namespace questions.Controllers
                         SELECTION dbModel = new SELECTION();
                         dbModel.QUESTION_ID = myModel.QuestionID;
                         dbModel.SELECTION_TEXT = myModel.Selection;
-                        
+                        dbModel.IS_ANSWER = myModel.IsAnswer;
                         await context.AddAsync(dbModel);
                         await context.SaveChangesAsync();
                         TempData["message"] = "Added Successfully!";
                         TempData["class"] = "alert alert-success";
-                        return RedirectToAction("Question", new { parentId = parent.REPO_ID, id = myModel.QuestionID });
+                        return RedirectToAction("Question","Questions", new { parentId = parent.REPO_ID, id = myModel.QuestionID });
 
                     }
                     else
@@ -138,11 +138,11 @@ namespace questions.Controllers
                     if (ModelState.IsValid)
                     {
                         oldSelection.SELECTION_TEXT = myModel.Selection;
-                        
+                        oldSelection.IS_ANSWER = myModel.IsAnswer;
                         await context.SaveChangesAsync();
                         TempData["message"] = "Saved Successfully!";
                         TempData["class"] = "alert alert-success";
-                        return RedirectToAction("Question", new { parentId = parent.REPO_ID , id=oldSelection.QUESTION_ID });
+                        return RedirectToAction("Question", "Questions", new { parentId = parent.REPO_ID , id=oldSelection.QUESTION_ID });
 
                     }
                     else
@@ -198,7 +198,7 @@ namespace questions.Controllers
                     await context.SaveChangesAsync();
                     TempData["message"] = "Deleted Successfully!";
                     TempData["class"] = "alert alert-success";
-                    return RedirectToAction("Index","Questions", new {id=parentId , parentId = repoId });
+                    return RedirectToAction("Question","Questions", new {id=parentId , parentId = repoId });
 
 
 
