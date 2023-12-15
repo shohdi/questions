@@ -139,6 +139,9 @@ namespace questions.Controllers
            
             if (ModelState.IsValid)
             {
+                
+                myModel.Question = (myModel.Question ?? "").Trim();
+                
                 bool checkedParent = await checkParent(myModel.RepoId);
                 if (!checkedParent)
                 {
