@@ -49,7 +49,7 @@ namespace questions.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Delete(DeleteRepoVM myModel)
-        {
+        {            
             if (ModelState.IsValid)
             {
                 var RepoId = myModel.RepoId;
@@ -100,6 +100,9 @@ namespace questions.Controllers
            
             if (ModelState.IsValid)
             {
+                
+                myModel.Name = (myModel.Name ?? "").Trim();
+                
                 var RepoId = myModel.RepoId;
                 ViewBag.RepoId = RepoId;
 

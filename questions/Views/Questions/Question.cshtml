@@ -59,7 +59,7 @@
 
             <div class="col-md-12">
 
-                <a href="@Url.Action("Index","Selection",new {parentId=Model.QuestionId})" class="btn btn-success">Add Selection <i class="bi bi-plus"></i></a>
+                <a href="@Url.Action("Selection","Selections",new {parentId=Model.QuestionId})" class="btn btn-success">Add Selection <i class="bi bi-plus"></i></a>
 
             </div>
             <div class="col-md-12">
@@ -83,7 +83,7 @@
                         {
                             <tr>
                                 <td>
-                                    @("" + selection.ID + " " + selection.SELECTION_TEXT)
+                                    @(selection.SELECTION_TEXT)
                                     @if (selection.IS_ANSWER.GetValueOrDefault())
                                     {
                                         <span>&nbsp;</span>
@@ -94,7 +94,7 @@
                                     <a class="btn btn-warning" href='@Url.Action("Selection","Selections",new {id=selection.ID,parentId=Model.QuestionId})'><i class="bi bi-pencil-square"></i></a>
                                 </td>
                                 <td>
-                                    @using (Html.BeginForm("Delete", "Selections", FormMethod.Post))
+                                    @using (Html.BeginForm("Delete", "Selections", FormMethod.Post, new { @class = "deleteForm" }))
                                     {
                                         <input type="hidden" value="@selection.ID" name="id" />
                                         <button type="submit" class="btn btn-danger deleteButton"><i class="bi bi-eraser"></i></button>
@@ -109,7 +109,7 @@
 
             </div>
         }
-        
+
         
         <div class="col-md-12 form-group">
             @Html.ValidationSummary(false, "", new { @class = "text-danger" })
@@ -124,6 +124,9 @@
         </div>
     }
 
+    
+    
+
 </div>
 
 @section scripts
@@ -135,11 +138,11 @@
 
         function deleteClick(e) {
             e.preventDefault();
-            let form = $(e.target).parents('form');
+            let form = $(e.target).parents('form.deleteForm');
             let answer = confirm('Are you sure ? you can\'t undo deleting it');
             if (answer) {
                 form.submit();
-                return true;
+                return false;
             }
             return false;
         }
