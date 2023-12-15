@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using questions.Data;
 using questions.Data.Models;
 using questions.Models;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace questions.Controllers
@@ -113,6 +114,11 @@ namespace questions.Controllers
                         dbModel.QUESTION_ID = myModel.QuestionID;
                         dbModel.SELECTION_TEXT = myModel.Selection;
                         dbModel.IS_ANSWER = myModel.IsAnswer;
+                        if(myModel.IsAnswer == true)
+                        {
+                            var allAnswers = await this.context.Selections.Where(s => s.QUESTION_ID == parent.ID).ToListAsync();
+                            allAnswers.ForEach(a => a.IS_ANSWER = false);
+                        }
                         await context.AddAsync(dbModel);
                         await context.SaveChangesAsync();
                         TempData["message"] = "Added Successfully!";
@@ -139,6 +145,11 @@ namespace questions.Controllers
                     {
                         oldSelection.SELECTION_TEXT = myModel.Selection;
                         oldSelection.IS_ANSWER = myModel.IsAnswer;
+                        if (myModel.IsAnswer == true)
+                        {
+                            var allAnswers = await this.context.Selections.Where(s => s.QUESTION_ID == parent.ID && s.ID != oldSelection.ID).ToListAsync();
+                            allAnswers.ForEach(a => a.IS_ANSWER = false);
+                        }
                         await context.SaveChangesAsync();
                         TempData["message"] = "Saved Successfully!";
                         TempData["class"] = "alert alert-success";
