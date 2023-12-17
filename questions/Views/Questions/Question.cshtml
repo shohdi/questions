@@ -94,11 +94,8 @@
                                     <a class="btn btn-warning" href='@Url.Action("Selection","Selections",new {id=selection.ID,parentId=Model.QuestionId})'><i class="bi bi-pencil-square"></i></a>
                                 </td>
                                 <td>
-                                    @using (Html.BeginForm("Delete", "Selections", FormMethod.Post, new { @class = "deleteForm" }))
-                                    {
-                                        <input type="hidden" value="@selection.ID" name="id" />
-                                        <button type="submit" class="btn btn-danger deleteButton"><i class="bi bi-eraser"></i></button>
-                                    }
+                                    <button type="submit" class="btn btn-danger deleteButton" data-delete-id="@selection.ID" ><i class="bi bi-eraser"></i></button>
+                                    
 
                                 </td>
 
@@ -128,6 +125,10 @@
     
 
 </div>
+@using (Html.BeginForm("Delete", "Selections", FormMethod.Post, new { @class = "deleteForm"  }))
+{
+     <input type="hidden" value="" name="id" id="deleteField" />
+}
 
 @section scripts
 {
@@ -138,7 +139,15 @@
 
         function deleteClick(e) {
             e.preventDefault();
-            let form = $(e.target).parents('form.deleteForm');
+            
+            let form = $('form.deleteForm');
+            let idField = $('#deleteField');
+            let item = $(e.target);
+            if (!item.is('button')) {
+                item = item.parents('button');
+            }
+            let id = item.attr('data-delete-id');
+            idField.val(id);
             let answer = confirm('Are you sure ? you can\'t undo deleting it');
             if (answer) {
                 form.submit();
