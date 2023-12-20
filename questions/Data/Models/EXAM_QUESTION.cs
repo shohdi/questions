@@ -33,6 +33,8 @@ namespace questions.Data.Models
         [Column(TypeName = "decimal(10)")]
         public long? ANSWER_ID { get; set; }
 
+        public bool IS_ANSWERED { get; set; }
+
 
         public QUESTION? Question { get; set; } = null!;
 
