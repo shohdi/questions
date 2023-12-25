@@ -11,3 +11,25 @@
 
 }
 
+<div class="row">
+    <div class="col-md-12">
+        @ViewData["Title"]
+        <hr />
+    </div>
+    @await Html.PartialAsync("_AlertMessage")
+</div>
+<div class="row">
+    @foreach(var exam in Model.AvailableExams)
+    {
+        <div class="col-md-12">
+            <span>@exam.NAME</span>
+        </div>
+        <div class="col-md-12">
+            <a class="btn btn-success" href="@Url.Action("Take",new {id=exam.ID})">Start Exam</a>
+            <hr />
+        </div>
+
+    }
+   
+</div>
+
