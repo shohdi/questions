@@ -1,0 +1,30 @@
+﻿@using questions.Data.Models
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model EXAM_QUETION
+@{
+    Layout = "_Layout";
+
+    ViewData["Title"] = "Select The Right Answer";
+
+
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @ViewBag.ExamName
+        
+        <br />
+        @ViewData["Title"]
+       
+        <hr />
+    </div>
+    @await Html.PartialAsync("_AlertMessage")
+</div>
+<div class="row">
+    
+
+</div>
+
+

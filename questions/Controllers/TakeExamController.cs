@@ -67,5 +67,26 @@ namespace questions.Controllers
             return RedirectToAction("Exam", new { id=exam.ID });
 
         }
+
+
+        public async Task<IActionResult> Exam(long? id)
+        {
+            var exam = await this.context.Exams.Where(q => q.ID == id).FirstOrDefaultAsync();
+            if(exam == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var examRepo  = await this.context.ExamRepositories.Where(q => q.ID == exam.REPO_ID).FirstOrDefaultAsync();
+            ViewBag.ExamName = examRepo.NAME;
+            var currentQuestion = await this.context.ExamQuestions.Where(e => e.IS_ANSWERED == false).OrderBy(e => e.ID).FirstOrDefaultAsync();
+            if(currentQuestion == null)
+            {
+                return RedirectToAction("ExamSummary");
+            }
+            currentQuestion.Question = await this.context.Questions.Where(q => q.ID == currentQuestion.QUESTION_ID).FirstOrDefaultAsync();
+            currentQuestion.Question.Selections = await this.context.Selections.Where(q => q.QUESTION_ID == currentQuestion.QUESTION_ID).OrderBy(o=>o.ID).ToListAsync();
+            return View(currentQuestion);
+
+        }
     }
 }
